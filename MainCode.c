@@ -1,9 +1,9 @@
-// C program to convert infix expressionression to postfix 
 #include <stdio.h> 
 #include <string.h> 
 #include <stdlib.h> 
 
-// Declare the stack type 
+
+//declare stack type
 struct Stack 
 { 
 	int top; 
@@ -11,7 +11,7 @@ struct Stack
 	int* array; 
 }; 
 
-// Stack creation
+//stack creation
 struct Stack* createStack( unsigned capacity ) 
 { 
 	struct Stack* stack = (struct Stack*) 
@@ -48,15 +48,15 @@ void push(struct Stack* stack, char op)
 } 
 
 
-//check if operand
-int isOperand(char ch) 
+//scanned character is operand
+int operand_true(char ch) 
 { 
 	return (ch >= 'a' && ch <= 'z') || 
 		(ch >= 'A' && ch <= 'Z'); 
 } 
 
 //return precedence
-int Precedence(char ch) 
+int precedence(char ch) 
 { 
 	switch (ch) 
 	{ 
@@ -80,7 +80,6 @@ int InfixPostfix(char* expression)
 { 
 	int i, k; 
 
-	// Create a stack of capacity equal to expressionression size 
 	struct Stack* stack = createStack(strlen(expression)); 
 	//check if stack is created
 	if(!stack) 
@@ -89,32 +88,30 @@ int InfixPostfix(char* expression)
 	for (i = 0, k = -1; expression[i]; ++i) 
 	{ 
 		
-		// If the scanned character is 
-		// an operand, add it to output. 
-		if (isOperand(expression[i])) 
+		//add it to output if the scanned character is an operand 
+		if (operand_true(expression[i])) 
 			expression[++k] = expression[i]; 
 		
-		// If the scanned character is an 
-		// ‘(‘, push it to the stack. 
+		//push it to the stack if character is '(' 
 		else if (expression[i] == '(') 
 			push(stack, expression[i]); 
 		
-		// If the scanned character is an ‘)’, 
-		// pop and output from the stack 
-		// until an ‘(‘ is encountered. 
+		// if character is ‘)’, pop and output from the stack until found ‘(‘ . 
 		else if (expression[i] == ')') 
 		{ 
 			while (!isEmpty(stack) && peek(stack) != '(') 
 				expression[++k] = pop(stack); 
 			if (!isEmpty(stack) && peek(stack) != '(') 
-				return -1; // invalid expressionression			 
+				return -1; 
+				// expression is invalid			 
 			else
 				pop(stack); 
 		} 
-		else // an operator is encountered 
+		// character is operator
+		else 
 		{ 
 			while (!isEmpty(stack) && 
-				Precedence(expression[i]) <= Precedence(peek(stack))) 
+				precedence(expression[i]) <= precedence(peek(stack))) 
 				expression[++k] = pop(stack); 
 			push(stack, expression[i]); 
 		} 
